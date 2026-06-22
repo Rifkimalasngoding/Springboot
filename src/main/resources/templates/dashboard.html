@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Dashboard - PC Lendaway</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-2 sidebar p-4">
+            <h4>PC Lendaway</h4>
+            <hr>
+            <ul class="nav flex-column">
+                <li class="nav-item"><a class="nav-link" href="/">Dashboard</a></li>
+                <li class="nav-item"><a class="nav-link" href="/form-peminjaman">Pinjam PC</a></li>
+                <li class="nav-item"><a class="nav-link" href="/list-pc">Status PC</a></li>
+            </ul>
+        </div>
+
+        <div class="col-md-10 p-4">
+            <h2>Dashboard Utama</h2>
+            <p class="text-muted">Sistem Manajemen dan Monitoring Peminjaman PC Lab</p>
+            <hr>
+
+            <div th:if="${successMessage}" class="alert alert-success alert-dismissible fade show" role="alert">
+                <span th:text="${successMessage}"></span>
+            </div>
+
+            <div th:if="${errorMessage}" class="alert alert-danger alert-dismissible fade show" role="alert">
+                <span th:text="${errorMessage}"></span>
+            </div>
+
+            <div class="row mb-4">
+                <div class="col-md-5">
+                    <div class="card shadow-sm border-0">
+                        <div class="card-header bg-primary text-white py-3 fw-bold">Buat Peminjaman Baru</div>
+                        <div class="card-body p-4">
+                            <form action="/transaksi/pinjam" method="post">
+                                <div class="mb-3">
+                                    <label class="form-label fw-semibold">Pilih PC</label>
+                                    <select name="kodePC" class="form-select" required>
+                                        <option value="">-- Pilih PC Tersedia --</option>
+                                        <option th:each="pc : ${listPc}" th:if="${pc.status == 'TERSEDIA'}" 
+                                                th:value="${pc.kodePC}" th:text="${pc.kodePC}"></option>
+                                    </select>
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label fw-semibold">NIM</label>
+                                    <input type="text" name="nim" class="form-control" placeholder="Masukkan NIM" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label fw-semibold">Nama Mahasiswa</label>
+                                    <input type="text" name="nama" class="form-control" placeholder="Nama Lengkap" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label fw-semibold">Durasi (Jam)</label>
+                                    <input type="number" name="durasi" class="form-control" min="1" placeholder="Contoh: 2" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label fw-semibold">Keperluan</label>
+                                    <input type="text" name="keperluan" class="form-control" placeholder="Contoh: Praktikum PBO" required>
+                                </div>
+                                <button type="submit" class="btn btn-success w-100 py-2 fw-bold">Pinjam Sekarang</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-7">
+                    <div class="card shadow-sm border-0">
+                        <div class="card-header bg-dark text-white py-3 fw-bold">Status Monitor PC Lab</div>
+                        <div class="card-body p-4">
+                            <div class="row">
+                                <div class="col-md-4 mb-3" th:each="pc : ${listPc}">
+                                    <div class="card text-center p-3 shadow-sm border" 
+                                         th:classappend="${pc.status == 'TERSEDIA' ? 'bg-light border-success' : (pc.status == 'DIPINJAM' ? 'bg-warning border-warning' : 'bg-danger text-white border-danger')}">
+                                        <h4 class="fw-bold mb-1

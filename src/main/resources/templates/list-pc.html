@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Daftar PC Lab</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="/css/style.css"> </head>
+<body>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-2 sidebar p-4">
+            <h4>🖥️ PC Lendaway</h4>
+            <hr>
+            <ul class="nav flex-column">
+                <li class="nav-item"><a class="nav-link" href="/">Dashboard</a></li>
+                <li class="nav-item"><a class="nav-link" href="/form-peminjaman">Pinjam PC</a></li>
+                <li class="nav-item"><a class="nav-link" href="/list-pc">Status PC</a></li>
+            </ul>
+        </div>
+
+        <div class="col-md-10 p-4">
+            <h2>Data Status PC Lab</h2>
+            <hr>
+            <div class="row">
+                <div class="col-md-3 mb-3" th:each="pc : ${listPc}">
+                    <div class="card shadow-sm text-center p-3" 
+                         th:classappend="${pc.status == 'TERSEDIA' ? 'bg-light border-success' : (pc.status == 'DIPINJAM' ? 'bg-warning' : 'bg-danger text-white')}">
+                        <h1 th:text="${pc.kodePC}"></h1>
+                        <h5 th:text="${pc.status}"></h5>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>
