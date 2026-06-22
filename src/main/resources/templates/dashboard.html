@@ -10,7 +10,7 @@
 <div class="container-fluid">
     <div class="row">
         <div class="col-md-2 sidebar p-4">
-            <h4>PC Lendaway</h4>
+            <h4>🖥️ PC Lendaway</h4>
             <hr>
             <ul class="nav flex-column">
                 <li class="nav-item"><a class="nav-link" href="/">Dashboard</a></li>
@@ -26,10 +26,12 @@
 
             <div th:if="${successMessage}" class="alert alert-success alert-dismissible fade show" role="alert">
                 <span th:text="${successMessage}"></span>
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
             </div>
 
             <div th:if="${errorMessage}" class="alert alert-danger alert-dismissible fade show" role="alert">
                 <span th:text="${errorMessage}"></span>
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
             </div>
 
             <div class="row mb-4">
@@ -69,11 +71,75 @@
                 </div>
 
                 <div class="col-md-7">
-                    <div class="card shadow-sm border-0">
+                    <div class="card shadow-sm border-0 h-100">
                         <div class="card-header bg-dark text-white py-3 fw-bold">Status Monitor PC Lab</div>
                         <div class="card-body p-4">
                             <div class="row">
                                 <div class="col-md-4 mb-3" th:each="pc : ${listPc}">
                                     <div class="card text-center p-3 shadow-sm border" 
                                          th:classappend="${pc.status == 'TERSEDIA' ? 'bg-light border-success' : (pc.status == 'DIPINJAM' ? 'bg-warning border-warning' : 'bg-danger text-white border-danger')}">
-                                        <h4 class="fw-bold mb-1
+                                        
+                                        <h4 class="fw-bold mb-1" th:text="${pc.kodePC}"></h4>
+                                        
+                                        <span class="badge rounded-pill mt-2" 
+                                              th:classappend="${pc.status == 'TERSEDIA' ? 'bg-success' : (pc.status == 'DIPINJAM' ? 'bg-dark' : 'bg-light text-danger')}" 
+                                              th:text="${pc.status}"></span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card shadow-sm border-0">
+                <div class="card-header bg-secondary text-white py-3 fw-bold">Riwayat Transaksi Aktif & Selesai</div>
+                <div class="card-body p-0">
+                    <div class="table-responsive">
+                        <table class="table table-hover table-striped mb-0 text-center align-middle">
+                            <thead class="table-light">
+                                <tr>
+                                    <th>ID</th>
+                                    <th>PC</th>
+                                    <th>NIM</th>
+                                    <th>Nama</th>
+                                    <th>Durasi</th>
+                                    <th>Status</th>
+                                    <th>Aksi</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr th:each="trx : ${listTransaksi}">
+                                    <td th:text="${trx.id}"></td>
+                                    <td class="fw-bold" th:text="${trx.pc.kodePC}"></td>
+                                    <td th:text="${trx.peminjam.nim}"></td>
+                                    <td th:text="${trx.peminjam.nama}"></td>
+                                    <td th:text="${trx.durasiJam} + ' Jam'"></td>
+                                    <td>
+                                        <span class="badge" th:classappend="${trx.statusAktif ? 'bg-warning text-dark' : 'bg-success'}" 
+                                              th:text="${trx.statusAktif ? 'Sedang Dipinjam' : 'Selesai'}"></span>
+                                    </td>
+                                    <td>
+                                        <form th:if="${trx.statusAktif}" th:action="@{/transaksi/kembali/{id}(id=${trx.id})}" method="post" class="m-0">
+                                            <button type="submit" class="btn btn-sm btn-outline-primary fw-bold">Kembalikan</button>
+                                        </form>
+                                        <span th:unless="${trx.statusAktif}" class="text-muted"><small><i>Tuntas</i></small></span>
+                                    </td>
+                                </tr>
+                                <tr th:if="${#lists.isEmpty(listTransaksi)}">
+                                    <td colspan="7" class="text-muted py-4">Belum ada riwayat transaksi.</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script src="/js/script.js"></script>
+</body>
+</html>
