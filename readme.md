@@ -1,4 +1,4 @@
-# PC Lendaway - Sistem Peminjaman PC Lab
+# Sistem Peminjaman PC Lab
 
 Proyek Tugas Mata Kuliah PBO (Pemrograman Berorientasi Objek) - Web Java (Spring Boot)
 
